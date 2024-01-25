@@ -3,7 +3,7 @@
  *
  *  Represents and renders each item in the todo list
  *
- *  mandatory props - item and id
+ *  mandatory props - name,id.complete
  */
 import PropTypes from 'prop-types';
 
@@ -13,18 +13,21 @@ export default Object.assign(
             <div>
                 <span
                     onClick={() => props.toggle && props.toggle(props.item.id)}
-                    style={{textDecoration: item.complete ? 'line-through' : 'none'}}
+                    style={{
+                        textDecoration: props.item.complete ? 'line-through' : 'none',
+                    }}
                 >
                     {props.item.name}
                 </span>
-                <button onClick={() => props.remove(item)}>X</button>
+                <button onClick={() => props.remove(props.item.id)}>X</button>
             </div>
         );
     },
     {
         props: PropTypes.shape({
-            item: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
             id: PropTypes.number.isRequired,
+            complete: PropTypes.bool.isRequired,
         }),
     },
 );

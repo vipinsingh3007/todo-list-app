@@ -6,6 +6,8 @@
  */
 
 import {render, screen} from '@testing-library/react';
+import '@testing-library/jest-dom';
+// import userEvent from '@testing-library/user-event';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
 import {TodoList} from '../components/todo-list';
@@ -47,4 +49,69 @@ describe('Test TodoList component', () => {
         expect(addButton).toBeTruthy();
         expect(addButton.innerHTML).toBe('Add Todo');
     });
+
+    test('Item gets added to todo list from store', () => {
+        store = mockStore({
+            todos: [
+                {
+                    name: 'Todo Item - One',
+                    id: new Date().getTime(),
+                    complete: false,
+                },
+            ],
+        });
+        render(
+            <Provider store={store}>
+                <TodoList />
+            </Provider>,
+        );
+
+        const addItem = screen.getByText('Todo Item - One');
+        expect(addItem).toBeInTheDocument();
+    });
+
+    test('on click of item --- strikethrough to mark as completed', () => {
+        store = mockStore({
+            todos: [
+                {
+                    name: 'Todo Item - One',
+                    id: new Date().getTime(),
+                    complete: true,
+                },
+            ],
+        });
+
+        render(
+            <Provider store={store}>
+                <TodoList />
+            </Provider>,
+        );
+
+        const addItem = screen.getByText('Todo Item - One');
+        expect(addItem.style.textDecoration).toBe('line-through');
+    });
+
+    /* it("on click of delete button respective item is deleted", async () => {
+        const user = userEvent.setup();
+
+        const store = mockStore({
+            todos: [{
+                name: "Todo Item - One",
+                id: new Date().getTime(),
+                complete: true
+            }]
+        });
+
+        render(
+            <Provider store={store}>
+                <TodoList />
+            </Provider>
+        );
+
+        const deleteButton = screen.getByText("X");
+        await user.click(deleteButton);
+        expect(() => screen.queryByText('Todo Item - One')).toThrow();
+
+
+    }); */
 });

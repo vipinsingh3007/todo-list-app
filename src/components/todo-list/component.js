@@ -3,40 +3,45 @@
  *
  *  Represents and renders a todo list with todo items
  *
- *  mandatory props - array of list of type string
  */
 
 import {useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-import {handleAddTodo, handleDeleteTodo, handleToggle} from '../../actions/todos';
+import {addTodo, removeTodo, toggleTodo} from '../../actions/todos';
 import {TodoItem} from '../todo-item';
 
 export default Object.assign(
     function (props) {
+        // connects to the redux state
         const todos = useSelector((state) => state.todos);
         const dispatch = useDispatch();
         const addTodoRef = useRef();
 
+        // add items to the list
         const addItem = (e) => {
             e.preventDefault();
 
             dispatch(
-                handleAddTodo(addTodoRef.current.value, () => {
-                    addTodoRef.current.value = '';
+                addTodo({
+                    name: addTodoRef.current.value,
+                    id: new Date().getTime(),
+                    complete: false,
                 }),
             );
+
+            addTodoRef.current.value = '';
         };
 
+        // Remove items from todo list
         const removeItem = (todo) => {
-            dispatch(handleDeleteTodo(todo));
+            dispatch(removeTodo(todo));
         };
 
+        // Mark item as complete.
         const toggleItem = (id) => {
-            dispatch(handleToggle(id));
+            dispatch(toggleTodo(id));
         };
-
-        console.log(todos);
 
         return (
             <div>
@@ -66,7 +71,13 @@ export default Object.assign(
     },
     {
         props: PropTypes.shape({
-            list: PropTypes.arrayOf('string'),
+            list: PropTypes.arrayOf(
+                PropTypes.shape({
+                    name: PropTypes.string.isRequired,
+                    id: PropTypes.number.isRequired,
+                    complete: PropTypes.bool.isRequired,
+                }),
+            ),
         }),
     },
 );
