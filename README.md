@@ -48,4 +48,5 @@ Runs eslint to check and fix linting issues.
 ### `npm run format`
 
 Runs lint and prettier scripts together.
+Run this lcoally before commiting
 

@@ -19,6 +19,9 @@
     "react/react-in-jsx-scope": "off",
     "import/no-named-as-default": "off",
     "import/no-named-as-default-member": "off",
+    "import/prefer-default-export":"off",
+    "prefer-arrow-callback":"off",
     "no-undef": "off"
+    
   }
 }
